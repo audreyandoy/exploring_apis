@@ -14,28 +14,40 @@ def get_recipe_list(cuisine, diet):
     response = requests.get(PATH, params = query_params)
     return response.json()["results"]
 
-# get all recipes
-recipes = get_recipe_list("Japanese", "vegetarian")
+def display_title(recipe):
+    print("="*len(recipe['title']))
+    print(f"{recipe['title'].upper()}")
+    print("="*len(recipe['title']))
 
-# get individual recipes
-for recipe in recipes:
-    print("="*40)
-    print(f"             {recipe['title'].upper()}             ")
-    print("="*40)
-
-    # get individual ingredients
+def display_ingredients(recipe):
     print("\nIngredients: ")
     print("------------")
     ingredients = recipe["extendedIngredients"]
     for ingredient in ingredients:
         print(ingredient["original"])
-    
-    # get individual recipe steps
+
+def display_recipe_steps(recipe):
     print("\nRecipe:")
     print("-------")
     recipe_steps = recipe["analyzedInstructions"][0]["steps"]
     for step in recipe_steps:
         print(f"#{step['number']} {step['step']} \n")
+
+
+def display_individual_recipe_info(recipes):
+    for recipe in recipes:
+        display_title(recipe)
+        display_ingredients(recipe)
+        display_recipe_steps(recipe)
+
+# get all recipes
+
+def main():
+    recipes = get_recipe_list("Japanese", "vegetarian")
+    display_individual_recipe_info(recipes)
+
+if __name__ == "__main__":
+    main()
 
 
 
